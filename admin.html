@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>myresume — Downloads Admin</title>
+<style>
+  :root{ --ink:#182430; --paper:#F5F7FA; --brass:#2F6FED; --slate:#64748B; --line:#E2E8F0; }
+  *{box-sizing:border-box;}
+  body{ margin:0; font-family:'Segoe UI',system-ui,sans-serif; background:var(--paper); color:var(--ink); padding:32px; }
+  h1{ font-size:20px; margin:0 0 4px; }
+  p.sub{ color:var(--slate); margin:0 0 20px; font-size:13px; }
+  .login-row{ display:flex; gap:8px; margin-bottom:20px; max-width:420px; }
+  input{ flex:1; padding:9px 11px; border:1px solid var(--line); border-radius:7px; font-size:14px; }
+  button{ background:var(--ink); color:#fff; border:none; padding:9px 16px; border-radius:7px; font-weight:600; cursor:pointer; font-size:14px; }
+  button:hover{ opacity:.9; }
+  table{ width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+  th,td{ text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); font-size:13px; }
+  th{ background:#F1F5F9; font-weight:700; text-transform:uppercase; font-size:11px; letter-spacing:.04em; color:var(--slate); }
+  tr:last-child td{ border-bottom:none; }
+  .empty, .error{ color:var(--slate); font-size:14px; padding:20px; }
+  .error{ color:#DC2626; }
+  .count{ font-size:13px; color:var(--slate); margin-bottom:10px; }
+  .table-wrap{ overflow-x:auto; }
+</style>
+</head>
+<body>
+  <h1>myresume — Downloads</h1>
+  <p class="sub">Every completed resume download, logged via Netlify Blobs.</p>
+  <div class="login-row">
+    <input type="password" id="pw" placeholder="Admin password" />
+    <button onclick="loadDownloads()">View</button>
+  </div>
+  <div id="result"></div>
+
+<script>
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function loadDownloads(){
+  const pw = document.getElementById('pw').value;
+  const resultEl = document.getElementById('result');
+  resultEl.innerHTML = '<p class="empty">Loading…</p>';
+  try{
+    const res = await fetch('/list-downloads?password=' + encodeURIComponent(pw));
+    const data = await res.json();
+    if(!res.ok){
+      resultEl.innerHTML = '<p class="error">' + esc(data.error || 'Request failed') + '</p>';
+      return;
+    }
+    try{ sessionStorage.setItem('adminPw', pw); }catch(e){}
+    if(!Array.isArray(data) || data.length === 0){
+      resultEl.innerHTML = '<p class="empty">No downloads recorded yet.</p>';
+      return;
+    }
+    resultEl.innerHTML = '<p class="count">' + data.length + ' download' + (data.length===1?'':'s') + '</p>' +
+      '<div class="table-wrap"><table><thead><tr><th>When</th><th>Method</th><th>Who</th><th>Name</th><th>Phone</th><th>Email</th><th>How heard</th><th>Type</th></tr></thead><tbody>' +
+      data.map(function(r){ return '<tr>'
+        + '<td>' + esc(new Date(r.timestamp).toLocaleString()) + '</td>'
+        + '<td>' + esc(r.method) + '</td>'
+        + '<td>' + esc(r.label) + '</td>'
+        + '<td>' + esc(r.name) + '</td>'
+        + '<td>' + esc(r.phone) + '</td>'
+        + '<td>' + esc(r.email) + '</td>'
+        + '<td>' + esc(r.howHeard) + '</td>'
+        + '<td>' + esc((r.exportType||'').toUpperCase()) + '</td>'
+        + '</tr>'; }).join('') +
+      '</tbody></table></div>';
+  }catch(e){
+    resultEl.innerHTML = '<p class="error">Could not load: ' + esc(e.message) + '</p>';
+  }
+}
+
+// Convenience only: remembers the password for this browser tab's session,
+// never sent anywhere except the one authorized request above.
+try{
+  var saved = sessionStorage.getItem('adminPw');
+  if(saved){ document.getElementById('pw').value = saved; loadDownloads(); }
+}catch(e){}
+document.getElementById('pw').addEventListener('keydown', function(e){ if(e.key === 'Enter') loadDownloads(); });
+</script>
+</body>
+</html>
