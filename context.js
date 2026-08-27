@@ -1,48 +1,72 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ContextAPI = void 0;
+const NoopContextManager_1 = require("../context/NoopContextManager");
+const global_utils_1 = require("../internal/global-utils");
+const diag_1 = require("./diag");
+const API_NAME = 'context';
+const NOOP_CONTEXT_MANAGER = new NoopContextManager_1.NoopContextManager();
 /**
- * Get a key to uniquely identify a context value
+ * Singleton object which represents the entry point to the OpenTelemetry Context API
  *
  * @since 1.0.0
  */
-export function createContextKey(description) {
-    // The specification states that for the same input, multiple calls should
-    // return different keys. Due to the nature of the JS dependency management
-    // system, this creates problems where multiple versions of some package
-    // could hold different keys for the same property.
-    //
-    // Therefore, we use Symbol.for which returns the same key for the same input.
-    return Symbol.for(description);
-}
-class BaseContext {
+class ContextAPI {
+    /** Empty private constructor prevents end users from constructing a new instance of the API */
+    constructor() { }
+    /** Get the singleton instance of the Context API */
+    static getInstance() {
+        if (!this._instance) {
+            this._instance = new ContextAPI();
+        }
+        return this._instance;
+    }
     /**
-     * Construct a new context which inherits values from an optional parent context.
+     * Set the current context manager.
      *
-     * @param parentContext a context from which to inherit values
+     * @returns true if the context manager was successfully registered, else false
      */
-    constructor(parentContext) {
-        // for minification
-        const self = this;
-        self._currentContext = parentContext ? new Map(parentContext) : new Map();
-        self.getValue = (key) => self._currentContext.get(key);
-        self.setValue = (key, value) => {
-            const context = new BaseContext(self._currentContext);
-            context._currentContext.set(key, value);
-            return context;
-        };
-        self.deleteValue = (key) => {
-            const context = new BaseContext(self._currentContext);
-            context._currentContext.delete(key);
-            return context;
-        };
+    setGlobalContextManager(contextManager) {
+        return (0, global_utils_1.registerGlobal)(API_NAME, contextManager, diag_1.DiagAPI.instance());
+    }
+    /**
+     * Get the currently active context
+     */
+    active() {
+        return this._getContextManager().active();
+    }
+    /**
+     * Execute a function with an active context
+     *
+     * @param context context to be active during function execution
+     * @param fn function to execute in a context
+     * @param thisArg optional receiver to be used for calling fn
+     * @param args optional arguments forwarded to fn
+     */
+    with(context, fn, thisArg, ...args) {
+        return this._getContextManager().with(context, fn, thisArg, ...args);
+    }
+    /**
+     * Bind a context to a target function or event emitter
+     *
+     * @param context context to bind to the event emitter or function. Defaults to the currently active context
+     * @param target function or event emitter to bind
+     */
+    bind(context, target) {
+        return this._getContextManager().bind(context, target);
+    }
+    _getContextManager() {
+        return (0, global_utils_1.getGlobal)(API_NAME) || NOOP_CONTEXT_MANAGER;
+    }
+    /** Disable and remove the global context manager */
+    disable() {
+        this._getContextManager().disable();
+        (0, global_utils_1.unregisterGlobal)(API_NAME, diag_1.DiagAPI.instance());
     }
 }
-/**
- * The root context is used as the default parent context when there is no active context
- *
- * @since 1.0.0
- */
-export const ROOT_CONTEXT = new BaseContext();
+exports.ContextAPI = ContextAPI;
 //# sourceMappingURL=context.js.map

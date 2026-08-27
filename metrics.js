@@ -1,15 +1,18 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { NOOP_METER_PROVIDER } from '../metrics/NoopMeterProvider';
-import { getGlobal, registerGlobal, unregisterGlobal, } from '../internal/global-utils';
-import { DiagAPI } from './diag';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MetricsAPI = void 0;
+const NoopMeterProvider_1 = require("../metrics/NoopMeterProvider");
+const global_utils_1 = require("../internal/global-utils");
+const diag_1 = require("./diag");
 const API_NAME = 'metrics';
 /**
  * Singleton object which represents the entry point to the OpenTelemetry Metrics API
  */
-export class MetricsAPI {
+class MetricsAPI {
     /** Empty private constructor prevents end users from constructing a new instance of the API */
     constructor() { }
     /** Get the singleton instance of the Metrics API */
@@ -24,13 +27,13 @@ export class MetricsAPI {
      * Returns true if the meter provider was successfully registered, else false.
      */
     setGlobalMeterProvider(provider) {
-        return registerGlobal(API_NAME, provider, DiagAPI.instance());
+        return (0, global_utils_1.registerGlobal)(API_NAME, provider, diag_1.DiagAPI.instance());
     }
     /**
      * Returns the global meter provider.
      */
     getMeterProvider() {
-        return getGlobal(API_NAME) || NOOP_METER_PROVIDER;
+        return (0, global_utils_1.getGlobal)(API_NAME) || NoopMeterProvider_1.NOOP_METER_PROVIDER;
     }
     /**
      * Returns a meter from the global meter provider.
@@ -40,7 +43,8 @@ export class MetricsAPI {
     }
     /** Remove the global meter provider */
     disable() {
-        unregisterGlobal(API_NAME, DiagAPI.instance());
+        (0, global_utils_1.unregisterGlobal)(API_NAME, diag_1.DiagAPI.instance());
     }
 }
+exports.MetricsAPI = MetricsAPI;
 //# sourceMappingURL=metrics.js.map
