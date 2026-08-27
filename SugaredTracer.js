@@ -1,18 +1,22 @@
-import { context as contextApi, SpanStatusCode } from '../../';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SugaredTracer = exports.wrapTracer = void 0;
+const __1 = require("../../");
 const defaultOnException = (e, span) => {
     span.recordException(e);
     span.setStatus({
-        code: SpanStatusCode.ERROR,
+        code: __1.SpanStatusCode.ERROR,
     });
 };
 /**
  * return a new SugaredTracer created from the supplied one
  * @param tracer
  */
-export function wrapTracer(tracer) {
+function wrapTracer(tracer) {
     return new SugaredTracer(tracer);
 }
-export class SugaredTracer {
+exports.wrapTracer = wrapTracer;
+class SugaredTracer {
     constructor(tracer) {
         this._tracer = tracer;
         this.startSpan = tracer.startSpan.bind(this._tracer);
@@ -28,6 +32,7 @@ export class SugaredTracer {
         return handleFn(span, opts, fn);
     }
 }
+exports.SugaredTracer = SugaredTracer;
 /**
  * Massages parameters of withSpan and withActiveSpan to allow signature overwrites
  * @param arg
@@ -51,7 +56,7 @@ function massageParams(arg, arg2, arg3) {
         fn = arg3;
     }
     opts = opts !== null && opts !== void 0 ? opts : {};
-    ctx = ctx !== null && ctx !== void 0 ? ctx : contextApi.active();
+    ctx = ctx !== null && ctx !== void 0 ? ctx : __1.context.active();
     return { opts, ctx, fn };
 }
 /**

@@ -1,7 +1,10 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DiagConsoleLogger = exports._originalConsoleMethods = void 0;
 const consoleMap = [
     { n: 'error', c: 'error' },
     { n: 'warn', c: 'warn' },
@@ -12,7 +15,7 @@ const consoleMap = [
 // Save original console methods at module load time, before any instrumentation
 // can wrap them. This ensures DiagConsoleLogger calls the unwrapped originals.
 // Exported for testing only — not part of the public API.
-export const _originalConsoleMethods = {};
+exports._originalConsoleMethods = {};
 if (typeof console !== 'undefined') {
     const keys = [
         'error',
@@ -26,7 +29,7 @@ if (typeof console !== 'undefined') {
         // eslint-disable-next-line no-console
         if (typeof console[key] === 'function') {
             // eslint-disable-next-line no-console
-            _originalConsoleMethods[key] = console[key];
+            exports._originalConsoleMethods[key] = console[key];
         }
     }
 }
@@ -37,15 +40,15 @@ if (typeof console !== 'undefined') {
  *
  * @since 1.0.0
  */
-export class DiagConsoleLogger {
+class DiagConsoleLogger {
     constructor() {
         function _consoleFunc(funcName) {
             return function (...args) {
                 // Prefer original (pre-instrumentation) methods saved at module load time.
-                let theFunc = _originalConsoleMethods[funcName];
+                let theFunc = exports._originalConsoleMethods[funcName];
                 // Some environments only expose the console when the F12 developer console is open
                 if (typeof theFunc !== 'function') {
-                    theFunc = _originalConsoleMethods['log'];
+                    theFunc = exports._originalConsoleMethods['log'];
                 }
                 // Fall back in case console was not available at module load time but became available later.
                 if (typeof theFunc !== 'function' && console) {
@@ -66,4 +69,5 @@ export class DiagConsoleLogger {
         }
     }
 }
+exports.DiagConsoleLogger = DiagConsoleLogger;
 //# sourceMappingURL=consoleLogger.js.map

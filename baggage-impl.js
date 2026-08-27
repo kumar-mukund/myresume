@@ -1,8 +1,11 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-export class BaggageImpl {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BaggageImpl = void 0;
+class BaggageImpl {
     constructor(entries) {
         this._entries = entries ? new Map(entries) : new Map();
     }
@@ -37,4 +40,5 @@ export class BaggageImpl {
         return new BaggageImpl();
     }
 }
+exports.BaggageImpl = BaggageImpl;
 //# sourceMappingURL=baggage-impl.js.map

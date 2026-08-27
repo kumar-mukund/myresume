@@ -1,11 +1,14 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { ROOT_CONTEXT } from './context';
-export class NoopContextManager {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.NoopContextManager = void 0;
+const context_1 = require("./context");
+class NoopContextManager {
     active() {
-        return ROOT_CONTEXT;
+        return context_1.ROOT_CONTEXT;
     }
     with(_context, fn, thisArg, ...args) {
         return fn.call(thisArg, ...args);
@@ -20,4 +23,5 @@ export class NoopContextManager {
         return this;
     }
 }
+exports.NoopContextManager = NoopContextManager;
 //# sourceMappingURL=NoopContextManager.js.map
