@@ -1,15 +1,18 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { INVALID_SPAN_CONTEXT } from './invalid-span-constants';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.NonRecordingSpan = void 0;
+const invalid_span_constants_1 = require("./invalid-span-constants");
 /**
  * The NonRecordingSpan is the default {@link Span} that is used when no Span
  * implementation is available. All operations are no-op including context
  * propagation.
  */
-export class NonRecordingSpan {
-    constructor(spanContext = INVALID_SPAN_CONTEXT) {
+class NonRecordingSpan {
+    constructor(spanContext = invalid_span_constants_1.INVALID_SPAN_CONTEXT) {
         this._spanContext = spanContext;
     }
     // Returns a SpanContext.
@@ -51,4 +54,5 @@ export class NonRecordingSpan {
     // By default does nothing
     recordException(_exception, _time) { }
 }
+exports.NonRecordingSpan = NonRecordingSpan;
 //# sourceMappingURL=NonRecordingSpan.js.map

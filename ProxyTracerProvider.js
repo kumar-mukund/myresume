@@ -1,10 +1,13 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { ProxyTracer } from './ProxyTracer';
-import { NoopTracerProvider } from './NoopTracerProvider';
-const NOOP_TRACER_PROVIDER = new NoopTracerProvider();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ProxyTracerProvider = void 0;
+const ProxyTracer_1 = require("./ProxyTracer");
+const NoopTracerProvider_1 = require("./NoopTracerProvider");
+const NOOP_TRACER_PROVIDER = new NoopTracerProvider_1.NoopTracerProvider();
 /**
  * Tracer provider which provides {@link ProxyTracer}s.
  *
@@ -16,13 +19,13 @@ const NOOP_TRACER_PROVIDER = new NoopTracerProvider();
  * @deprecated This will be removed in the next major version.
  * @since 1.0.0
  */
-export class ProxyTracerProvider {
+class ProxyTracerProvider {
     /**
      * Get a {@link ProxyTracer}
      */
     getTracer(name, version, options) {
         var _a;
-        return ((_a = this.getDelegateTracer(name, version, options)) !== null && _a !== void 0 ? _a : new ProxyTracer(this, name, version, options));
+        return ((_a = this.getDelegateTracer(name, version, options)) !== null && _a !== void 0 ? _a : new ProxyTracer_1.ProxyTracer(this, name, version, options));
     }
     getDelegate() {
         var _a;
@@ -39,4 +42,5 @@ export class ProxyTracerProvider {
         return (_a = this._delegate) === null || _a === void 0 ? void 0 : _a.getTracer(name, version, options);
     }
 }
+exports.ProxyTracerProvider = ProxyTracerProvider;
 //# sourceMappingURL=ProxyTracerProvider.js.map

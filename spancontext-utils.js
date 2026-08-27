@@ -1,9 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.wrapSpanContext = exports.isSpanContextValid = exports.isValidSpanId = exports.isValidTraceId = void 0;
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { INVALID_SPANID, INVALID_TRACEID } from './invalid-span-constants';
-import { NonRecordingSpan } from './NonRecordingSpan';
+const invalid_span_constants_1 = require("./invalid-span-constants");
+const NonRecordingSpan_1 = require("./NonRecordingSpan");
 // Valid characters (0-9, a-f, A-F) are marked as 1.
 const isHex = new Uint8Array([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -29,31 +32,35 @@ function isValidHex(id, length) {
 /**
  * @since 1.0.0
  */
-export function isValidTraceId(traceId) {
-    return isValidHex(traceId, 32) && traceId !== INVALID_TRACEID;
+function isValidTraceId(traceId) {
+    return isValidHex(traceId, 32) && traceId !== invalid_span_constants_1.INVALID_TRACEID;
 }
+exports.isValidTraceId = isValidTraceId;
 /**
  * @since 1.0.0
  */
-export function isValidSpanId(spanId) {
-    return isValidHex(spanId, 16) && spanId !== INVALID_SPANID;
+function isValidSpanId(spanId) {
+    return isValidHex(spanId, 16) && spanId !== invalid_span_constants_1.INVALID_SPANID;
 }
+exports.isValidSpanId = isValidSpanId;
 /**
  * Returns true if this {@link SpanContext} is valid.
  * @return true if this {@link SpanContext} is valid.
  *
  * @since 1.0.0
  */
-export function isSpanContextValid(spanContext) {
+function isSpanContextValid(spanContext) {
     return (isValidTraceId(spanContext.traceId) && isValidSpanId(spanContext.spanId));
 }
+exports.isSpanContextValid = isSpanContextValid;
 /**
  * Wrap the given {@link SpanContext} in a new non-recording {@link Span}
  *
  * @param spanContext span context to be wrapped
  * @returns a new non-recording {@link Span} with the provided context
  */
-export function wrapSpanContext(spanContext) {
-    return new NonRecordingSpan(spanContext);
+function wrapSpanContext(spanContext) {
+    return new NonRecordingSpan_1.NonRecordingSpan(spanContext);
 }
+exports.wrapSpanContext = wrapSpanContext;
 //# sourceMappingURL=spancontext-utils.js.map

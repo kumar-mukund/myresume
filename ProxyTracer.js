@@ -1,15 +1,18 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { NoopTracer } from './NoopTracer';
-const NOOP_TRACER = new NoopTracer();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ProxyTracer = void 0;
+const NoopTracer_1 = require("./NoopTracer");
+const NOOP_TRACER = new NoopTracer_1.NoopTracer();
 /**
  * Proxy tracer provided by the proxy tracer provider
  *
  * @since 1.0.0
  */
-export class ProxyTracer {
+class ProxyTracer {
     constructor(provider, name, version, options) {
         this._provider = provider;
         this.name = name;
@@ -39,4 +42,5 @@ export class ProxyTracer {
         return this._delegate;
     }
 }
+exports.ProxyTracer = ProxyTracer;
 //# sourceMappingURL=ProxyTracer.js.map

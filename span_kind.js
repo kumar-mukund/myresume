@@ -1,11 +1,14 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SpanKind = void 0;
 /**
  * @since 1.0.0
  */
-export var SpanKind;
+var SpanKind;
 (function (SpanKind) {
     /** Default value. Indicates that the span is used internally. */
     SpanKind[SpanKind["INTERNAL"] = 0] = "INTERNAL";
@@ -31,5 +34,5 @@ export var SpanKind;
      * relationship between producer and consumer spans.
      */
     SpanKind[SpanKind["CONSUMER"] = 4] = "CONSUMER";
-})(SpanKind || (SpanKind = {}));
+})(SpanKind = exports.SpanKind || (exports.SpanKind = {}));
 //# sourceMappingURL=span_kind.js.map

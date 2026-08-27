@@ -1,13 +1,16 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SpanStatusCode = void 0;
 /**
  * An enumeration of status codes.
  *
  * @since 1.0.0
  */
-export var SpanStatusCode;
+var SpanStatusCode;
 (function (SpanStatusCode) {
     /**
      * The default status.
@@ -22,5 +25,5 @@ export var SpanStatusCode;
      * The operation contains an error.
      */
     SpanStatusCode[SpanStatusCode["ERROR"] = 2] = "ERROR";
-})(SpanStatusCode || (SpanStatusCode = {}));
+})(SpanStatusCode = exports.SpanStatusCode || (exports.SpanStatusCode = {}));
 //# sourceMappingURL=status.js.map
