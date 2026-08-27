@@ -1,16 +1,20 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { NOOP_METER } from './NoopMeter';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.NOOP_METER_PROVIDER = exports.NoopMeterProvider = void 0;
+const NoopMeter_1 = require("./NoopMeter");
 /**
  * An implementation of the {@link MeterProvider} which returns an impotent Meter
  * for all calls to `getMeter`
  */
-export class NoopMeterProvider {
+class NoopMeterProvider {
     getMeter(_name, _version, _options) {
-        return NOOP_METER;
+        return NoopMeter_1.NOOP_METER;
     }
 }
-export const NOOP_METER_PROVIDER = new NoopMeterProvider();
+exports.NoopMeterProvider = NoopMeterProvider;
+exports.NOOP_METER_PROVIDER = new NoopMeterProvider();
 //# sourceMappingURL=NoopMeterProvider.js.map

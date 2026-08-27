@@ -1,11 +1,14 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.defaultTextMapSetter = exports.defaultTextMapGetter = void 0;
 /**
  * @since 1.0.0
  */
-export const defaultTextMapGetter = {
+exports.defaultTextMapGetter = {
     get(carrier, key) {
         if (carrier == null) {
             return undefined;
@@ -22,7 +25,7 @@ export const defaultTextMapGetter = {
 /**
  * @since 1.0.0
  */
-export const defaultTextMapSetter = {
+exports.defaultTextMapSetter = {
     set(carrier, key, value) {
         if (carrier == null) {
             return;

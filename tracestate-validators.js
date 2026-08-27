@@ -1,7 +1,10 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateValue = exports.validateKey = void 0;
 const VALID_KEY_CHAR_RANGE = '[_0-9a-z-*/]';
 const VALID_KEY = `[a-z]${VALID_KEY_CHAR_RANGE}{0,255}`;
 const VALID_VENDOR_KEY = `[a-z0-9]${VALID_KEY_CHAR_RANGE}{0,240}@[a-z]${VALID_KEY_CHAR_RANGE}{0,13}`;
@@ -16,15 +19,17 @@ const INVALID_VALUE_COMMA_EQUAL_REGEX = /,|=/;
  * vendor name. Vendors SHOULD set the tenant ID at the beginning of the key.
  * see https://www.w3.org/TR/trace-context/#key
  */
-export function validateKey(key) {
+function validateKey(key) {
     return VALID_KEY_REGEX.test(key);
 }
+exports.validateKey = validateKey;
 /**
  * Value is opaque string up to 256 characters printable ASCII RFC0020
  * characters (i.e., the range 0x20 to 0x7E) except comma , and =.
  */
-export function validateValue(value) {
+function validateValue(value) {
     return (VALID_VALUE_BASE_REGEX.test(value) &&
         !INVALID_VALUE_COMMA_EQUAL_REGEX.test(value));
 }
+exports.validateValue = validateValue;
 //# sourceMappingURL=tracestate-validators.js.map

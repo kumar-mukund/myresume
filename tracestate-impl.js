@@ -1,8 +1,11 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { validateKey, validateValue } from './tracestate-validators';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TraceStateImpl = void 0;
+const tracestate_validators_1 = require("./tracestate-validators");
 const MAX_TRACE_STATE_ITEMS = 32;
 const MAX_TRACE_STATE_LEN = 512;
 const LIST_MEMBERS_SEPARATOR = ',';
@@ -16,7 +19,7 @@ const LIST_MEMBER_KEY_VALUE_SPLITTER = '=';
  * - The value of any key can be updated. Modified keys MUST be moved to the
  * beginning of the list.
  */
-export class TraceStateImpl {
+class TraceStateImpl {
     constructor(rawTraceState) {
         this._internalState = new Map();
         if (rawTraceState)
@@ -61,7 +64,7 @@ export class TraceStateImpl {
             if (i !== -1) {
                 const key = listMember.slice(0, i);
                 const value = listMember.slice(i + 1, part.length);
-                if (validateKey(key) && validateValue(value)) {
+                if ((0, tracestate_validators_1.validateKey)(key) && (0, tracestate_validators_1.validateValue)(value)) {
                     agg.set(key, value);
                 }
                 else {
@@ -87,4 +90,5 @@ export class TraceStateImpl {
         return traceState;
     }
 }
+exports.TraceStateImpl = TraceStateImpl;
 //# sourceMappingURL=tracestate-impl.js.map

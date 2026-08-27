@@ -1,8 +1,11 @@
+"use strict";
 /*
  * Copyright The OpenTelemetry Authors
  * SPDX-License-Identifier: Apache-2.0
  */
-import { VERSION } from '../version';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isCompatible = exports._makeCompatibilityCheck = void 0;
+const version_1 = require("../version");
 const re = /^(\d+)\.(\d+)\.(\d+)(-(.+))?$/;
 /**
  * Create a function to test an API version to see if it is compatible with the provided ownVersion.
@@ -20,7 +23,7 @@ const re = /^(\d+)\.(\d+)\.(\d+)(-(.+))?$/;
  *
  * @param ownVersion version which should be checked against
  */
-export function _makeCompatibilityCheck(ownVersion) {
+function _makeCompatibilityCheck(ownVersion) {
     const acceptedVersions = new Set([ownVersion]);
     const rejectedVersions = new Set();
     const myVersionMatch = ownVersion.match(re);
@@ -88,6 +91,7 @@ export function _makeCompatibilityCheck(ownVersion) {
         return _reject(globalVersion);
     };
 }
+exports._makeCompatibilityCheck = _makeCompatibilityCheck;
 /**
  * Test an API version to see if it is compatible with this API.
  *
@@ -103,5 +107,5 @@ export function _makeCompatibilityCheck(ownVersion) {
  *
  * @param version version of the API requesting an instance of the global API
  */
-export const isCompatible = _makeCompatibilityCheck(VERSION);
+exports.isCompatible = _makeCompatibilityCheck(version_1.VERSION);
 //# sourceMappingURL=semver.js.map
